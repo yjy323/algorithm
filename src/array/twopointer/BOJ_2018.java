@@ -1,8 +1,8 @@
-package datastructure;
+package array.twopointer;
 
 import java.util.Scanner;
 
-public class BOJ_2018_two_pointer {
+public class BOJ_2018 {
 
   public static void main(String[] args) {
 

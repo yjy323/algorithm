@@ -1,11 +1,11 @@
-package datastructure;
+package array.slidingwindow;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class BOJ_12891_sliding_window {
+public class BOJ_12891 {
 
   static final int CATEGORIES_NUM = 4;
   static int[] passwordCntArr = new int[CATEGORIES_NUM];

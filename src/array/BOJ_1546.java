@@ -1,8 +1,8 @@
-package datastructure;
+package array;
 
 import java.util.Scanner;
 
-public class BOJ_1546_array {
+public class BOJ_1546 {
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
 

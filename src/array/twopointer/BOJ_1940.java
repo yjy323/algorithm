@@ -1,14 +1,13 @@
-package datastructure;
+package array.twopointer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.Buffer;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-public class BOJ_1940_two_pointer {
+public class BOJ_1940 {
 
   public static void main(String[] args) throws IOException {
 

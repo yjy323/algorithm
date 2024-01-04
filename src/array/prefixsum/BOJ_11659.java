@@ -1,11 +1,11 @@
-package datastructure;
+package array.prefixsum;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class BOJ_11659_prefix_sum {
+public class BOJ_11659 {
 
   public static void main(String[] args) throws IOException {
 
