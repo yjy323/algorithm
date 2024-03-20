@@ -88,24 +88,12 @@ public class BOJ_2290 {
     infoList[0] = new Info(true, false, true, H_FLAG.BOTH, H_FLAG.BOTH);
 
     for (int i = 0; i < 5; i++) {
+      int loop = 1;
       if (i % 2 == 1) {
-        for (int j = 0; j < s; j++) {
-          for (char c : n) {
-            int num = c - '0';
-            Info numInfo = infoList[num];
-            switch (i) {
-              case 1:
-                drawH(numInfo.topH, s);
-                break;
-              case 3:
-                drawH(numInfo.bottomH, s);
-                break;
-            }
-            sb.append(" ");
-          }
-          sb.append("\n");
-        }
-      } else {
+        loop = s;
+      }
+
+      for (int j = 0; j < loop; j++) {
         for (char c : n) {
           int num = c - '0';
           Info numInfo = infoList[num];
@@ -113,8 +101,14 @@ public class BOJ_2290 {
             case 0:
               drawW(numInfo.topW, s);
               break;
+            case 1:
+              drawH(numInfo.topH, s);
+              break;
             case 2:
               drawW(numInfo.midW, s);
+              break;
+            case 3:
+              drawH(numInfo.bottomH, s);
               break;
             case 4:
               drawW(numInfo.bottomW, s);
