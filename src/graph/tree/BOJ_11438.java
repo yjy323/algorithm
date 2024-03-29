@@ -59,13 +59,13 @@ public class BOJ_11438 {
     }
 
     for (int i = k - 1; i >= 0; --i) {
-      if (ancestors[i][n1] != ancestors[i][n2]){
+      if (ancestors[i][n1] != ancestors[i][n2]) {
         n1 = ancestors[i][n1];
         n2 = ancestors[i][n2];
       }
     }
 
-    if (n1 != n2){
+    if (n1 != n2) {
       return ancestors[0][n1];
     } else {
       return n1;
