@@ -1,78 +1,46 @@
 '''
 	1회 20240625
-	2회
+	2회 20240626
 	3회
 
 	아이디어
 		1. 시물레이션 문제
-		2. 각 조건을 검증하는 함수를 작성한다.
-			1. 기둥을 설치하는 조건
-			2. 기둥을 삭제하는 조건
-			3. 보를 설치하는 조건
-			4. 보를 삭제하는 조건
-		3. 입력 순서대로 각 조건을 검증하며 건축을 수행한다.
+		2. 각 명령을 수행한다.
+    3. 명령을 우선 수행한 뒤, 건물 전체가 조건을 만족하는 지 확인한다.
+			1. 효율성보다는 문제의 조건을 잘 이행하는 지 확인하는 문제이기 때문이다.
 '''
 
-from copy import deepcopy
+VER, HOR = 0, 1
+REMOVE, APPEND = 0, 1
 
-VERT = 0
-HORZ = 1
-POP = 0
-PUSH = 1
+def inspect_buildings(answer):
+    for building in answer:
+        x, y, a = building
+        if a == VER:
+            if y != 0 \
+								and (x, y - 1, VER) not in answer \
+								and (x, y, HOR) not in answer and (x - 1, y, HOR) not in answer:
+                return False
+        else:
+            if (x, y - 1, VER) not in answer and (x + 1, y - 1, VER) not in answer \
+								and ((x - 1, y, HOR) not in answer or (x + 1, y, HOR) not in answer):
+                return False
+    return True
 
-def push_v(answer, x, y):
-	if y == 0 \
-			or (x, y - 1, VERT) in answer \
-			or (x, y, HORZ) in answer or (x - 1, y, HORZ) in answer:
-		return True
-	else:
-		return False
-	
-def push_h(answer, x, y):
-	if (x, y - 1, VERT) in answer or (x + 1, y - 1, VERT) in answer \
-			or ((x - 1, y, HORZ) in answer and (x + 1, y, HORZ) in answer):
-		return True
-	else:
-		return False
-	
-def pop_v(answer, x, y):
-	new_answer = deepcopy(answer)
-	new_answer.remove((x, y, VERT))
-	if (x, y + 1, VERT) in new_answer and not push_v(new_answer, x, y + 1):
-		return False
-	elif (x, y + 1, HORZ) in new_answer and not push_h(new_answer, x, y + 1):
-		return False
-	elif (x - 1, y + 1, HORZ) in new_answer and not push_h(new_answer, x - 1, y + 1):
-		return False
-	else:
-		return True
-	
-def pop_h(answer, x, y):
-	new_answer = deepcopy(answer)
-	new_answer.remove((x, y, HORZ))
-	if (x, y, VERT) in new_answer and not push_v(new_answer, x, y):
-		return False
-	elif (x + 1, y, VERT) in new_answer and not push_v(new_answer, x + 1, y):
-		return False
-	elif (x - 1, y, HORZ) in new_answer and not push_h(new_answer, x - 1, y):
-		return False
-	elif (x + 1, y, HORZ) in new_answer and not push_h(new_answer, x + 1, y):
-		return False
-	else:
-		return True
+def build(answer, build_frame):
+    for build_info in build_frame:
+        x, y, a, b = build_info
+        building = (x, y, a)
+        if b == APPEND:
+            answer.append(building)
+            if not inspect_buildings(answer):
+                answer.remove(building)
+        else:
+            answer.remove(building)
+            if not inspect_buildings(answer):
+                answer.append(building)
 
 def solution(n, build_frame):
-	answer = []
-	for x, y, a, b in build_frame:
-		if a == VERT and b == PUSH and push_v(answer, x, y):
-			answer.append((x, y, VERT))
-		elif a == HORZ and b == PUSH and push_h(answer, x, y):
-			answer.append((x, y, HORZ))
-		elif a == VERT and b == POP and pop_v(answer, x, y):
-			answer.remove((x, y, VERT))
-		elif a == HORZ and b == POP and pop_h(answer, x, y):
-			answer.remove((x, y, HORZ))
-	answer.sort()
-	return answer
-
-print(solution(5, [[0,0,0,1],[2,0,0,1],[4,0,0,1],[0,1,1,1],[1,1,1,1],[2,1,1,1],[3,1,1,1],[2,0,0,0],[1,1,1,0],[2,2,0,1]]))
+    answer = []
+    build(answer, build_frame)
+    return sorted(answer)
