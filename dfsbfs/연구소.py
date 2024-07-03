@@ -1,6 +1,6 @@
 '''
 	1회 20240702
-	2회
+	2회 20240703
 	3회
 
 	아이디어
@@ -10,62 +10,51 @@
 		3. 바이러스를 퍼뜨리는 BFS 알고리즘
 		4. 빈 공간의 개수를 세는 반복문
 '''
+
 import sys
 import copy
-from collections import deque
+from itertools import combinations
+
 input = sys.stdin.readline
 
 n, m = map(int, input().split())
 init_map = []
-copy_map = [[0] * m for _ in range(n)]
+
 for _ in range(n):
 	init_map.append(list(map(int, input().split())))
 
-result = 0
-def virus(start):
-	dx = [1, 0, -1, 0]
-	dy = [0, 1, 0, -1]
+dx = (1, 0, -1, 0)
+dy = (0, 1, 0, -1)
 
-	x, y = start
-	q = deque([(x, y)])
-	while q:
-		v = q.popleft()
-		x, y = v
-		for i in range(4):
-			nx = x + dx[i]
-			ny = y + dy[i]
-			if 0 <= nx < n and 0 <= ny < m \
-				and copy_map[nx][ny] == 0:
-				copy_map[nx][ny] = 2
-				q.append((nx, ny))
+max_safty_zone = 0
+def virus(copy_map, x, y):
+	for i in range(4):
+		nx = x + dx[i]
+		ny = y + dy[i]
+		if 0 <= nx < n and 0 <= ny < m and copy_map[nx][ny] == 0:
+			copy_map[nx][ny] = 2
+			virus(copy_map, nx, ny)
 
-def safty_area():
-	area = 0
+def safty_zone(copy_map):
+	zone = 0
 	for row in copy_map:
 		for col in row:
 			if col == 0:
-				area += 1
-	return area
+				zone += 1
+	return zone
 
-def wall(wall_ctr):
-	global result
-	if wall_ctr == 3:
-		for i in range(n):
-			for j in range(m): 
-				copy_map[i][j] = init_map[i][j]
-		for i in range(n):
-			for j in range(m): 
-				if copy_map[i][j] == 2:
-					virus((i, j))
-		result = max(result, safty_area())
-		return
-	
-	for i in range(n):
-		for j in range(m):
-			if init_map[i][j] == 0:
-				init_map[i][j] = 1
-				wall(wall_ctr + 1)
-				init_map[i][j] = 0
+def wall(max_safty_zone):
+	candidates = list(combinations([(x, y) for x in range(n) for y in range(m) if init_map[x][y] == 0], 3))
+	for candidate in candidates:
+		copy_map = copy.deepcopy(init_map)
+		for i in range(3):
+			x, y = candidate[i]
+			copy_map[x][y] = 1
+		for x in range(n):
+			for y in range(m):
+				if init_map[x][y] == 2:
+					virus(copy_map, x, y)
+		max_safty_zone = max(max_safty_zone, safty_zone(copy_map))
+	return max_safty_zone
 
-wall(0)
-print(result)
+print(wall(max_safty_zone))
